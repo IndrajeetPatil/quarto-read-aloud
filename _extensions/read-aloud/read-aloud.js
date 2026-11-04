@@ -15,6 +15,10 @@ window.RevealReadAloud = function () {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'read-aloud-button';
+      const icon = document.createElement('span');
+      icon.className = 'read-aloud-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      button.append(icon);
       button.setAttribute('aria-pressed', 'false');
       const status = document.createElement('span');
       status.className = 'read-aloud-status';
@@ -34,7 +38,10 @@ window.RevealReadAloud = function () {
       };
       const update = () => {
         button.disabled = !supported || !notes();
-        button.textContent = !supported ? labels.unsupported : !notes() ? labels.empty : utterance ? labels.stop : labels.read;
+        const label = !supported ? labels.unsupported : !notes() ? labels.empty : utterance ? labels.stop : labels.read;
+        button.setAttribute('aria-label', label);
+        button.title = label;
+        icon.classList.toggle('read-aloud-icon-stop', !!utterance);
         button.setAttribute('aria-pressed', String(!!utterance));
       };
       const stop = () => {

@@ -5,8 +5,11 @@
   bottom: max(52px, env(safe-area-inset-bottom));
   right: 12px;
   min-height: 44px;
+  min-width: 44px;
   max-width: 65vw;
-  padding: 8px 16px;
+  padding: 8px;
+  display: grid;
+  place-items: center;
   border: 2px solid var(--read-aloud-foreground, #fff);
   border-radius: 6px;
   background: var(--read-aloud-background, #202124);
@@ -32,4 +35,18 @@
 .reveal.paused .read-aloud-button { visibility: hidden; }
 @media print {
   .reveal .read-aloud-button, .reveal .read-aloud-status { display: none !important; }
+}
+
+.reveal .read-aloud-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9h4l5-4v14l-5-4H3z'/%3E%3Cpath d='M15 8q4 4 0 8m3-11q7 7 0 14' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.reveal .read-aloud-icon-stop {
+  mask: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
 }

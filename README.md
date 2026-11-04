@@ -1,6 +1,6 @@
 # Read Aloud for Quarto
 
-An opt-in **Read aloud / Stop reading** button that reads the current RevealJS slide's speaker notes using browser speech synthesis. No runtime dependencies, API keys, or generated audio files.
+An opt-in **speaker / stop icon** button with accessible labels and tooltips that reads the current RevealJS slide's speaker notes using browser speech synthesis. No runtime dependencies, API keys, or generated audio files.
 
 ## Install and use
 
@@ -47,10 +47,10 @@ Optional settings under `format.revealjs.readAloud`:
 | `rate` | `1` | Speech rate, clamped to 0.1–10 |
 | `lang` | Slide/document language, then `en` | BCP 47 language tag, e.g. `en-GB` |
 | `voice` | Browser default | Exact installed voice name; falls back if unavailable |
-| `labels.read` | `Read aloud` | Idle text |
-| `labels.stop` | `Stop reading` | Active text |
-| `labels.empty` | `No speaker notes` | Empty slide text |
-| `labels.unsupported` | `Speech synthesis unavailable` | Unsupported browser text |
+| `labels.read` | `Read aloud` | Idle accessible label and tooltip |
+| `labels.stop` | `Stop reading` | Active accessible label and tooltip |
+| `labels.empty` | `No speaker notes` | Empty slide accessible label and tooltip |
+| `labels.unsupported` | `Speech synthesis unavailable` | Unsupported browser accessible label and tooltip |
 | `labels.error` | `Unable to read notes. Try again.` | Accessible speech error status |
 
 Customise colours with CSS variables `--read-aloud-background` and `--read-aloud-foreground`; preserve sufficient contrast. There are no automatic voice downloads or language detection.

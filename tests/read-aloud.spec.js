@@ -21,10 +21,10 @@ async function open(page, unsupported = false) {
 test('reads only current notes, supports stop, completion, errors and keyboard', async ({ page }) => {
   await open(page);
   const button = page.locator('.read-aloud-button');
-  await expect(button).toHaveText('Read aloud');
+  await expect(button).toHaveAttribute('aria-label', 'Read aloud');
   await button.focus();
   await page.keyboard.press('Enter');
-  await expect(button).toHaveText('Stop reading');
+  await expect(button).toHaveAttribute('aria-label', 'Stop reading');
   expect(await page.evaluate(() => window.speechLog[0])).toBe(await page.evaluate(() => {
     const copy = Reveal.getCurrentSlide().querySelector('aside.notes').cloneNode(true);
     copy.querySelectorAll('script, style, [aria-hidden="true"]').forEach(node => node.remove());
@@ -32,15 +32,15 @@ test('reads only current notes, supports stop, completion, errors and keyboard',
     return copy.textContent.replace(/\s+/g, ' ').trim();
   }));
   await page.keyboard.press('Space');
-  await expect(button).toHaveText('Read aloud');
+  await expect(button).toHaveAttribute('aria-label', 'Read aloud');
   expect(await page.evaluate(() => window.speechLog.at(-1))).toBe('CANCEL');
   await button.click();
   await page.evaluate(() => window.lastUtterance.onend());
-  await expect(button).toHaveText('Read aloud');
+  await expect(button).toHaveAttribute('aria-label', 'Read aloud');
   await button.click();
   await page.evaluate(() => window.lastUtterance.onerror());
   await expect(page.getByRole('status').filter({ hasText: 'Unable to read notes' })).toBeAttached();
-  await expect(button).toHaveText('Read aloud');
+  await expect(button).toHaveAttribute('aria-label', 'Read aloud');
 });
 
 test('navigation cancels, never autoplays, and every slide has the right state', async ({ page }) => {
@@ -62,7 +62,7 @@ test('navigation cancels, never autoplays, and every slide has the right state',
 test('unsupported browser disables the control without breaking slides', async ({ page }) => {
   await open(page, true);
   await expect(page.locator('.read-aloud-button')).toBeDisabled();
-  await expect(page.locator('.read-aloud-button')).toHaveText('Speech synthesis unavailable');
+  await expect(page.locator('.read-aloud-button')).toHaveAttribute('aria-label', 'Speech synthesis unavailable');
   await page.evaluate(() => Reveal.next());
 });
 
@@ -75,13 +75,13 @@ test('configuration, stale events and scroll view work', async ({ page }) => {
     window.testPlugin.init(Reveal);
   });
   const button = page.locator('.read-aloud-button');
-  await expect(button).toHaveText('Listen');
+  await expect(button).toHaveAttribute('aria-label', 'Listen');
   await button.click();
   expect(await page.evaluate(() => [window.lastUtterance.lang, window.lastUtterance.rate, window.lastUtterance.voice.name])).toEqual(['en-GB', 1.2, 'Test voice']);
   await page.evaluate(() => { window.oldEnd = window.lastUtterance.onend; Reveal.next(); Reveal.prev(); });
   await button.click();
   await page.evaluate(() => window.oldEnd());
-  await expect(button).toHaveText('Stop reading');
+  await expect(button).toHaveAttribute('aria-label', 'Stop reading');
   await page.evaluate(() => window.testPlugin.destroy());
   await expect(button).toHaveCount(0);
   await page.goto('?view=scroll');
