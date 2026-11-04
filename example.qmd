@@ -1,0 +1,32 @@
+---
+lang: en
+format:
+  revealjs:
+    title-slide: false
+    readAloud:
+      rate: 1
+revealjs-plugins:
+  - read-aloud
+---
+
+## Listen to the notes
+
+Select **Read aloud**, then **Stop reading** to cancel.
+
+::: {.notes}
+These are the speaker notes. The button reads these notes, rather than the visible slide content.
+
+A second paragraph should follow with a space between sentences.
+:::
+
+## No notes
+
+The button is disabled when this slide has no notes.
+
+## Another slide
+
+Use the keyboard to focus the button and press Enter or Space.
+
+::: {.notes}
+Changing slides stops speech. Reading never starts automatically.
+:::

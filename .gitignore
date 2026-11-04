@@ -1,0 +1,5 @@
+.quarto/
+example.html
+example_files/
+node_modules/
+test-results/

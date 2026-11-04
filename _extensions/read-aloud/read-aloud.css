@@ -1,0 +1,35 @@
+/* SPDX-License-Identifier: MIT */
+.reveal .read-aloud-button {
+  position: fixed;
+  z-index: 30;
+  bottom: max(52px, env(safe-area-inset-bottom));
+  right: 12px;
+  min-height: 44px;
+  max-width: 65vw;
+  padding: 8px 16px;
+  border: 2px solid var(--read-aloud-foreground, #fff);
+  border-radius: 6px;
+  background: var(--read-aloud-background, #202124);
+  color: var(--read-aloud-foreground, #fff);
+  font: 600 16px/1.25 system-ui, sans-serif;
+  cursor: pointer;
+}
+.reveal .read-aloud-button:focus-visible {
+  outline: 3px solid #0072ce;
+  outline-offset: 3px;
+}
+.reveal .read-aloud-button:disabled { cursor: default; }
+.reveal .read-aloud-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.reveal.overview .read-aloud-button,
+.reveal.paused .read-aloud-button { visibility: hidden; }
+@media print {
+  .reveal .read-aloud-button, .reveal .read-aloud-status { display: none !important; }
+}

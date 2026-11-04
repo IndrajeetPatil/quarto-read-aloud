@@ -1,0 +1,9 @@
+title: Read Aloud
+author: Indrajeet Patil
+version: 0.1.0
+quarto-required: ">=1.11.9"
+contributes:
+  revealjs-plugins:
+    - name: RevealReadAloud
+      script: read-aloud.js
+      stylesheet: read-aloud.css

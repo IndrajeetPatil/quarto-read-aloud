@@ -1,0 +1,12 @@
+{
+  "name": "quarto-read-aloud",
+  "private": true,
+  "packageManager": "pnpm@12.16.1",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1"
+  }
+}
