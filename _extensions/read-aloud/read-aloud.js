@@ -39,8 +39,9 @@ window.RevealReadAloud = function () {
         return copy.textContent.replace(/\s+/g, ' ').trim();
       };
       const update = () => {
-        button.disabled = !supported || !notes();
-        const label = !supported ? labels.unsupported : !notes() ? labels.empty : utterance ? labels.stop : labels.read;
+        const hasNotes = supported && !!notes();
+        button.disabled = !hasNotes;
+        const label = !supported ? labels.unsupported : !hasNotes ? labels.empty : utterance ? labels.stop : labels.read;
         button.setAttribute('aria-label', label);
         button.title = label;
         icon.classList.toggle('read-aloud-icon-stop', !!utterance);
