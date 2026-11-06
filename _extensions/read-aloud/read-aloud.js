@@ -33,12 +33,15 @@ window.RevealReadAloud = function () {
         if (!aside) return (slide.getAttribute('data-notes') || '').trim();
         const copy = aside.cloneNode(true);
         copy.querySelectorAll('script, style, [aria-hidden="true"]').forEach(node => node.remove());
-        copy.querySelectorAll('p, li, br, h1, h2, h3, h4, h5, h6').forEach(node => node.append(' '));
+        // textContent does not preserve block boundaries; keep inline words intact.
+        copy.querySelectorAll('p, li, br, h1, h2, h3, h4, h5, h6, div, blockquote, pre, dt, dd, tr, th, td')
+          .forEach(node => { node.prepend(' '); node.append(' '); });
         return copy.textContent.replace(/\s+/g, ' ').trim();
       };
       const update = () => {
-        button.disabled = !supported || !notes();
-        const label = !supported ? labels.unsupported : !notes() ? labels.empty : utterance ? labels.stop : labels.read;
+        const hasNotes = supported && !!notes();
+        button.disabled = !hasNotes;
+        const label = !supported ? labels.unsupported : !hasNotes ? labels.empty : utterance ? labels.stop : labels.read;
         button.setAttribute('aria-label', label);
         button.title = label;
         icon.classList.toggle('read-aloud-icon-stop', !!utterance);
