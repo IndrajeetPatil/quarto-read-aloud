@@ -20,17 +20,15 @@ async function open(page, unsupported = false) {
 
 test('reads only current notes, supports stop, completion, errors and keyboard', async ({ page }) => {
   await open(page);
+  await page.evaluate(() => {
+    Reveal.getCurrentSlide().querySelector('aside.notes').replaceChildren('Only these speaker notes are read.');
+  });
   const button = page.locator('.read-aloud-button');
   await expect(button).toHaveAttribute('aria-label', 'Read aloud');
   await button.focus();
   await page.keyboard.press('Enter');
   await expect(button).toHaveAttribute('aria-label', 'Stop reading');
-  expect(await page.evaluate(() => window.speechLog[0])).toBe(await page.evaluate(() => {
-    const copy = Reveal.getCurrentSlide().querySelector('aside.notes').cloneNode(true);
-    copy.querySelectorAll('script, style, [aria-hidden="true"]').forEach(node => node.remove());
-    copy.querySelectorAll('p, li, br, h1, h2, h3, h4, h5, h6').forEach(node => node.append(' '));
-    return copy.textContent.replace(/\s+/g, ' ').trim();
-  }));
+  expect(await page.evaluate(() => window.speechLog[0])).toBe('Only these speaker notes are read.');
   await page.keyboard.press('Space');
   await expect(button).toHaveAttribute('aria-label', 'Read aloud');
   expect(await page.evaluate(() => window.speechLog.at(-1))).toBe('CANCEL');
@@ -41,6 +39,24 @@ test('reads only current notes, supports stop, completion, errors and keyboard',
   await page.evaluate(() => window.lastUtterance.onerror());
   await expect(page.getByRole('status').filter({ hasText: 'Unable to read notes' })).toBeAttached();
   await expect(button).toHaveAttribute('aria-label', 'Read aloud');
+});
+
+test('preserves note word boundaries and inline text without changing the source', async ({ page }) => {
+  await open(page);
+  const markup = 'Start<p>Paragraph</p>After<div>Division</div><blockquote>Quote</blockquote>' +
+    '<pre>Code</pre><dl><dt>Term</dt><dd>Definition</dd></dl>' +
+    '<table><tbody><tr><th>Heading</th><td>Cell</td></tr><tr><td>Next</td></tr></tbody></table>' +
+    '<h2>Title</h2><ul><li>First</li><li>Second</li></ul>Line<br>Break ' +
+    'inter<em>nation</em>al <span aria-hidden="true">Hidden</span>' +
+    '<script>Ignored script</script><style>Ignored style</style> End';
+  await page.evaluate(markup => {
+    Reveal.getCurrentSlide().querySelector('aside.notes').innerHTML = markup;
+  }, markup);
+  await page.locator('.read-aloud-button').click();
+  expect(await page.evaluate(() => window.speechLog[0])).toBe(
+    'Start Paragraph After Division Quote Code Term Definition Heading Cell Next Title First Second Line Break international End'
+  );
+  expect(await page.evaluate(() => Reveal.getCurrentSlide().querySelector('aside.notes').innerHTML)).toBe(markup);
 });
 
 test('navigation cancels, never autoplays, and every slide has the right state', async ({ page }) => {
