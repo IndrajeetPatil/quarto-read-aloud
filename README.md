@@ -36,7 +36,7 @@ The text to read aloud.
 
 - A shared button remains available on every slide and reads only the current slide's notes, in presentation and native scroll views.
 - Click, or focus the button and press Enter or Space, to start or stop. Speech never starts automatically.
-- Changing slides, entering overview, pausing the deck, hiding the tab, or leaving the page stops speech.
+- Changing slides, entering overview, pausing the deck, or leaving the page stops speech. Speech continues when you switch to another tab or window.
 - Slides without notes and unsupported browsers show a disabled button. The control is hidden when printing.
 - Notes remain in the HTML, as with native speaker notes. Do not put confidential information in notes.
 - The extension makes no network requests. Browser or operating-system voices may use online services; offline availability depends on the voice.

@@ -83,7 +83,6 @@ window.RevealReadAloud = function () {
         update();
         try { synth.speak(current); } catch { current.onerror(); }
       };
-      const visibility = () => { if (document.hidden) stop(); };
       button.addEventListener('click', click);
       // Keep native button activation without triggering Reveal's navigation keys.
       button.addEventListener('keydown', event => {
@@ -92,14 +91,12 @@ window.RevealReadAloud = function () {
       const events = ['slidechanged', 'overviewshown', 'paused'];
       events.forEach(event => deck.on(event, stop));
       deck.on('ready', update);
-      document.addEventListener('visibilitychange', visibility);
       window.addEventListener('pagehide', stop);
       update();
       cleanup = () => {
         stop();
         events.forEach(event => deck.off(event, stop));
         deck.off('ready', update);
-        document.removeEventListener('visibilitychange', visibility);
         window.removeEventListener('pagehide', stop);
         button.remove();
         status.remove();
