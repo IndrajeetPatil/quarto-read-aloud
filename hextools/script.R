@@ -9,7 +9,9 @@ showtext_auto()
 
 img <- image_read("hextools/data.svg", density = 192)
 
-sticker(
+logo_file <- "docs/images/logo.png"
+
+logo <- sticker(
     img,
     package = "quarto-read-aloud",
     p_color = "#1D3B53",
@@ -22,11 +24,23 @@ sticker(
     s_width = 1.3,
     s_height = 0.9,
     h_color = "#447099",
-    filename = "docs/images/logo.png",
+    filename = logo_file,
     h_fill = "white",
-    url = "github.com/IndrajeetPatil/quarto-read-aloud",
-    u_x = 0.99,
-    u_size = 6.5,
-    u_color = "grey",
     dpi = 600
 )
+
+# sticker() left-aligns the URL from u_x/u_y, so a short URL ends up bunched
+# towards the bottom vertex. Draw it centred on the lower-right edge instead,
+# inset from the border by the same distance as hexSticker's default.
+edge_angle <- pi / 6
+inset <- 0.08 * cos(edge_angle)
+logo <- logo +
+    geom_url(
+        "github.com/IndrajeetPatil/quarto-read-aloud",
+        x = 1 + sqrt(3) / 4 - inset * sin(edge_angle),
+        y = 0.25 + inset * cos(edge_angle),
+        size = 6.5,
+        color = "grey",
+        hjust = 0.5
+    )
+save_sticker(logo_file, logo, dpi = 600)
