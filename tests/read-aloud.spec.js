@@ -75,6 +75,19 @@ test('navigation cancels, never autoplays, and every slide has the right state',
   expect(await page.evaluate(() => window.speechLog.length)).toBe(2);
 });
 
+test('speech continues when the tab is hidden', async ({ page }) => {
+  await open(page);
+  const button = page.locator('.read-aloud-button');
+  await button.click();
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true });
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect(button).toHaveAttribute('aria-label', 'Stop reading');
+  expect(await page.evaluate(() => window.speechLog)).not.toContain('CANCEL');
+});
+
 test('unsupported browser disables the control without breaking slides', async ({ page }) => {
   await open(page, true);
   await expect(page.locator('.read-aloud-button')).toBeDisabled();
