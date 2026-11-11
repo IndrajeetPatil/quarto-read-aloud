@@ -1,6 +1,9 @@
-# Read Aloud for Quarto
+# Read Aloud for Quarto <img src="docs/images/logo.png" align="right" width="240" alt="quarto-read-aloud hex sticker" />
 
 An opt-in **speaker / stop icon** button with accessible labels and tooltips that reads the current RevealJS slide's speaker notes using browser speech synthesis. No runtime dependencies, API keys, or generated audio files.
+
+> [!TIP]
+> See it in action in the decks on [indrapatil.com/presentations](https://www.indrapatil.com/presentations/): open any presentation and press the speaker button to hear that slide's notes.
 
 ## Install and use
 
