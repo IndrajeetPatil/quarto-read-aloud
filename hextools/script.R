@@ -24,9 +24,9 @@ sticker(
     h_color = "#447099",
     filename = "docs/images/logo.png",
     h_fill = "white",
-    url = "https://github.com/IndrajeetPatil/quarto-read-aloud",
-    u_x = 0.97,
-    u_size = 5.5,
+    url = "github.com/IndrajeetPatil/quarto-read-aloud",
+    u_x = 0.99,
+    u_size = 6.5,
     u_color = "grey",
     dpi = 600
 )
