@@ -5,6 +5,10 @@ An opt-in **speaker / stop icon** button with accessible labels and tooltips tha
 > [!TIP]
 > See it in action in the decks on [indrapatil.com/presentations](https://www.indrapatil.com/presentations/): open any presentation and press the speaker button to hear that slide's notes.
 
+![How Read Aloud works: speaker notes on the current slide are read when you activate the Read aloud button, using browser speech synthesis.](docs/images/read-aloud-flow.webp)
+
+The illustration prompt is documented in [docs/illustrations.md](docs/illustrations.md).
+
 ## Install and use
 
 Requires **Quarto 1.11.9 or newer**, the latest stable release at creation.
