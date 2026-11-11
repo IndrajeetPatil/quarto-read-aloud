@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 112" width="504" height="224">
+  <!-- A slide whose speaker notes are read aloud -->
+  <rect x="5" y="9" width="132" height="94" rx="11" fill="#ffffff" stroke="#447099" stroke-width="7"/>
+  <g fill="none" stroke-linecap="round">
+    <path d="M 26 35 H 92" stroke="#447099" stroke-width="9"/>
+    <path d="M 26 59 H 116" stroke="#a9c4dd" stroke-width="6"/>
+    <path d="M 26 79 H 100" stroke="#a9c4dd" stroke-width="6"/>
+  </g>
+  <!-- Speaker -->
+  <rect x="156" y="45" width="17" height="30" rx="3.5" fill="#447099"/>
+  <path d="M 173 45 L 194 29 Q 199 26 199 32 L 199 88 Q 199 94 194 91 L 173 75 Z" fill="#447099"/>
+  <g fill="none" stroke="#75aadb" stroke-width="7" stroke-linecap="round">
+    <path d="M 213.4 49.6 A 14 14 0 0 1 213.4 70.4"/>
+    <path d="M 222.1 39.9 A 27 27 0 0 1 222.1 80.1"/>
+    <path d="M 230.8 30.3 A 40 40 0 0 1 230.8 89.7"/>
+  </g>
+</svg>
