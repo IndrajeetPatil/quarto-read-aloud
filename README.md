@@ -41,7 +41,7 @@ The text to read aloud.
 - A shared button remains available on every slide and reads only the current slide's notes, in presentation and native scroll views.
 - Click, or focus the button and press Enter or Space, to start or stop. Speech never starts automatically.
 - Changing slides, entering overview, pausing the deck, or leaving the page stops speech. Speech continues when you switch to another tab or window.
-- Slides without notes and unsupported browsers show a disabled button. The control is hidden when printing.
+- Slides without notes and unsupported browsers show a dimmed, unavailable button. It stays focusable, and its tooltip and screen-reader label explain why it cannot read. The control is hidden when printing.
 - Notes remain in the HTML, as with native speaker notes. Do not put confidential information in notes.
 - The extension makes no network requests. Browser or operating-system voices may use online services; offline availability depends on the voice.
 
@@ -56,8 +56,8 @@ Optional settings under `format.revealjs.readAloud`:
 | `voice` | Browser default | Exact installed voice name; falls back if unavailable |
 | `labels.read` | `Read aloud` | Idle accessible label and tooltip |
 | `labels.stop` | `Stop reading` | Active accessible label and tooltip |
-| `labels.empty` | `No speaker notes` | Empty slide accessible label and tooltip |
-| `labels.unsupported` | `Speech synthesis unavailable` | Unsupported browser accessible label and tooltip |
+| `labels.empty` | `No speaker notes on this slide` | Empty slide accessible label and tooltip |
+| `labels.unsupported` | `Read aloud is not supported in this browser` | Unsupported browser accessible label and tooltip |
 | `labels.error` | `Unable to read notes. Try again.` | Accessible speech error status |
 
 Customise colours with CSS variables `--read-aloud-background` and `--read-aloud-foreground`; preserve sufficient contrast. There are no automatic voice downloads or language detection.

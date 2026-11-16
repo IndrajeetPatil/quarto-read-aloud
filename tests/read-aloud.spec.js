@@ -69,7 +69,7 @@ test('navigation cancels, never autoplays, and every slide has the right state',
       Reveal.slide(...Object.values(Reveal.getIndices(slide)).slice(0, 2));
       const text = slide.querySelector('aside.notes')?.textContent.trim() || slide.dataset.notes?.trim();
       const button = document.querySelector('.read-aloud-button');
-      if (button.disabled === !!text) throw new Error(`Wrong button state: ${slide.id}`);
+      if ((button.getAttribute('aria-disabled') === 'true') === !!text) throw new Error(`Wrong button state: ${slide.id}`);
     }
   });
   expect(await page.evaluate(() => window.speechLog.length)).toBe(2);
@@ -88,11 +88,32 @@ test('speech continues when the tab is hidden', async ({ page }) => {
   expect(await page.evaluate(() => window.speechLog)).not.toContain('CANCEL');
 });
 
-test('unsupported browser disables the control without breaking slides', async ({ page }) => {
+test('unsupported browser explains the unavailable control without breaking slides', async ({ page }) => {
   await open(page, true);
-  await expect(page.locator('.read-aloud-button')).toBeDisabled();
-  await expect(page.locator('.read-aloud-button')).toHaveAttribute('aria-label', 'Speech synthesis unavailable');
+  const button = page.locator('.read-aloud-button');
+  const label = 'Read aloud is not supported in this browser';
+  await expect(button).toHaveAttribute('aria-disabled', 'true');
+  await expect(button).toHaveAttribute('aria-label', label);
+  await expect(button).toHaveAttribute('title', label);
+  await button.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('status').filter({ hasText: label })).toBeAttached();
   await page.evaluate(() => Reveal.next());
+});
+
+test('slides without notes keep a focusable control that explains why it is unavailable', async ({ page }) => {
+  await open(page);
+  await page.evaluate(() => Reveal.next());
+  const button = page.locator('.read-aloud-button');
+  const label = 'No speaker notes on this slide';
+  await expect(button).toHaveAttribute('aria-disabled', 'true');
+  await expect(button).toHaveAttribute('title', label);
+  await button.focus();
+  await expect(button).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('status').filter({ hasText: label })).toBeAttached();
+  expect(await page.evaluate(() => window.speechLog)).toEqual([]);
+  expect(await page.evaluate(() => Reveal.getIndices().h)).toBe(1);
 });
 
 test('configuration, stale events and scroll view work', async ({ page }) => {
