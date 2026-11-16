@@ -21,7 +21,8 @@
   outline: 3px solid #0072ce;
   outline-offset: 3px;
 }
-.reveal .read-aloud-button:disabled { cursor: default; }
+.reveal .read-aloud-button[aria-disabled="true"] { cursor: not-allowed; }
+.reveal .read-aloud-button[aria-disabled="true"] .read-aloud-icon { opacity: 0.5; }
 .reveal .read-aloud-status {
   position: absolute;
   width: 1px;

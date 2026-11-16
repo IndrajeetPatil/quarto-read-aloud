@@ -21,7 +21,7 @@ A second paragraph should follow with a space between sentences.
 
 ## No notes
 
-The button is disabled when this slide has no notes.
+The button is unavailable on this slide because it has no notes. Hover over or focus it to see why.
 
 ## Another slide
 

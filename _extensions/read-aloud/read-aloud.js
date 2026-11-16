@@ -6,8 +6,8 @@ window.RevealReadAloud = function () {
     init(deck) {
       const options = deck.getConfig().readAloud || {};
       const labels = {
-        read: 'Read aloud', stop: 'Stop reading', empty: 'No speaker notes',
-        unsupported: 'Speech synthesis unavailable', error: 'Unable to read notes. Try again.',
+        read: 'Read aloud', stop: 'Stop reading', empty: 'No speaker notes on this slide',
+        unsupported: 'Read aloud is not supported in this browser', error: 'Unable to read notes. Try again.',
         ...options.labels,
       };
       const synth = window.speechSynthesis;
@@ -40,7 +40,8 @@ window.RevealReadAloud = function () {
       };
       const update = () => {
         const hasNotes = supported && !!notes();
-        button.disabled = !hasNotes;
+        // aria-disabled keeps the button hoverable and focusable so its tooltip explains why.
+        button.setAttribute('aria-disabled', String(!hasNotes));
         const label = !supported ? labels.unsupported : !hasNotes ? labels.empty : utterance ? labels.stop : labels.read;
         button.setAttribute('aria-label', label);
         button.title = label;
@@ -59,7 +60,10 @@ window.RevealReadAloud = function () {
         event.stopPropagation();
         if (utterance) return stop();
         const text = notes();
-        if (!supported || !text) return;
+        if (!supported || !text) {
+          status.textContent = button.title;
+          return;
+        }
         status.textContent = '';
         utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = options.lang || deck.getCurrentSlide().closest('[lang]')?.lang || document.documentElement.lang || 'en';
