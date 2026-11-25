@@ -14,15 +14,18 @@
   border-radius: 6px;
   background: var(--read-aloud-background, #202124);
   color: var(--read-aloud-foreground, #fff);
-  font: 600 16px/1.25 system-ui, sans-serif;
+  font:
+    600 16px / 1.25 system-ui,
+    sans-serif;
   cursor: pointer;
 }
 .reveal .read-aloud-button:focus-visible {
   outline: 3px solid #0072ce;
   outline-offset: 3px;
 }
-.reveal .read-aloud-button[aria-disabled="true"] { cursor: not-allowed; }
-.reveal .read-aloud-button[aria-disabled="true"] .read-aloud-icon { opacity: 0.5; }
+.reveal .read-aloud-button[aria-disabled="true"] {
+  cursor: not-allowed;
+}
 .reveal .read-aloud-status {
   position: absolute;
   width: 1px;
@@ -33,9 +36,15 @@
   white-space: nowrap;
 }
 .reveal.overview .read-aloud-button,
-.reveal.paused .read-aloud-button { visibility: hidden; }
+.reveal.paused .read-aloud-button {
+  visibility: hidden;
+}
 @media print {
-  .reveal .read-aloud-button, .reveal .read-aloud-status { display: none !important; }
+  .reveal .read-aloud-button,
+  .reveal .read-aloud-status {
+    /* biome-ignore lint/complexity/noImportantStyles: the control must never print, whatever display a deck theme sets. */
+    display: none !important;
+  }
 }
 
 .reveal .read-aloud-icon {
@@ -43,11 +52,16 @@
   width: 24px;
   height: 24px;
   background: currentColor;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9h4l5-4v14l-5-4H3z'/%3E%3Cpath d='M15 8q4 4 0 8m3-11q7 7 0 14' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9h4l5-4v14l-5-4H3z'/%3E%3Cpath d='M15 8q4 4 0 8m3-11q7 7 0 14' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 .reveal .read-aloud-icon-stop {
   mask: none;
   width: 18px;
   height: 18px;
   border-radius: 2px;
+}
+.reveal .read-aloud-button[aria-disabled="true"] .read-aloud-icon {
+  opacity: 0.5;
 }
