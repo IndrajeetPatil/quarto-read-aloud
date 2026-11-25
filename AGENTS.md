@@ -15,21 +15,21 @@ with browser speech synthesis. Start with the [README](README.md).
 ## Setup and checks
 
 Install Quarto (the version in `.github/workflows/test.yaml`), then run
-`pnpm install` and `prek install`.
+`vp install` and `prek install`.
 
 | Command | Run it |
 | --- | --- |
-| `pnpm check` | Biome lint and format check, then strict `tsc` over the extension |
-| `pnpm fix` | To apply Biome formatting and safe lint fixes |
-| `quarto render example.qmd && pnpm test` | After any change to the extension or tests |
+| `vp check` | Vite+ format check, type-aware lint, and strict type check over the extension |
+| `vp check --fix` | To apply formatting and safe lint fixes |
+| `quarto render example.qmd && vp exec playwright test` | After any change to the extension or tests |
 | `prek run --all-files` | Before committing |
 
-Never lower a check to get green. Switch a lint rule off only with a
-`biome-ignore` comment saying why.
+Never lower a check to get green. Switch a lint rule off only with an
+`oxlint-disable-next-line` comment saying why.
 
 ## Conventions
 
-- Type the extension with JSDoc so `tsc` checks it strictly; add shared
+- Type the extension with JSDoc so `vp check` type-checks it strictly; add shared
   shapes to `types/read-aloud.d.ts`.
 - Keep the README's configuration table in step with the options the
   extension reads.
