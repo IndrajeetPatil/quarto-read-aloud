@@ -1,27 +1,43 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 async function open(page, unsupported = false) {
-  await page.addInitScript(({ unsupported }) => {
-    window.speechLog = [];
-    window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
-    if (unsupported) {
-      Object.defineProperty(window, 'speechSynthesis', { value: undefined });
-      return;
-    }
-    Object.defineProperty(window, 'speechSynthesis', { value: {
-      getVoices: () => [{ name: 'Test voice' }],
-      speak: utterance => { window.lastUtterance = utterance; window.speechLog.push(utterance.text); },
-      cancel: () => window.speechLog.push('CANCEL'),
-    }});
-  }, { unsupported });
+  await page.addInitScript(
+    ({ unsupported }) => {
+      window.speechLog = [];
+      window.SpeechSynthesisUtterance = class {
+        constructor(text) {
+          this.text = text;
+        }
+      };
+      if (unsupported) {
+        Object.defineProperty(window, 'speechSynthesis', { value: undefined });
+        return;
+      }
+      Object.defineProperty(window, 'speechSynthesis', {
+        value: {
+          getVoices: () => [{ name: 'Test voice' }],
+          speak: (utterance) => {
+            window.lastUtterance = utterance;
+            window.speechLog.push(utterance.text);
+          },
+          cancel: () => window.speechLog.push('CANCEL'),
+        },
+      });
+    },
+    { unsupported },
+  );
   await page.goto('');
   await page.waitForFunction(() => window.Reveal?.isReady());
 }
 
-test('reads only current notes, supports stop, completion, errors and keyboard', async ({ page }) => {
+test('reads only current notes, supports stop, completion, errors and keyboard', async ({
+  page,
+}) => {
   await open(page);
   await page.evaluate(() => {
-    Reveal.getCurrentSlide().querySelector('aside.notes').replaceChildren('Only these speaker notes are read.');
+    Reveal.getCurrentSlide()
+      .querySelector('aside.notes')
+      .replaceChildren('Only these speaker notes are read.');
   });
   const button = page.locator('.read-aloud-button');
   await expect(button).toHaveAttribute('aria-label', 'Read aloud');
@@ -41,25 +57,32 @@ test('reads only current notes, supports stop, completion, errors and keyboard',
   await expect(button).toHaveAttribute('aria-label', 'Read aloud');
 });
 
-test('preserves note word boundaries and inline text without changing the source', async ({ page }) => {
+test('preserves note word boundaries and inline text without changing the source', async ({
+  page,
+}) => {
   await open(page);
-  const markup = 'Start<p>Paragraph</p>After<div>Division</div><blockquote>Quote</blockquote>' +
+  const markup =
+    'Start<p>Paragraph</p>After<div>Division</div><blockquote>Quote</blockquote>' +
     '<pre>Code</pre><dl><dt>Term</dt><dd>Definition</dd></dl>' +
     '<table><tbody><tr><th>Heading</th><td>Cell</td></tr><tr><td>Next</td></tr></tbody></table>' +
     '<h2>Title</h2><ul><li>First</li><li>Second</li></ul>Line<br>Break ' +
     'inter<em>nation</em>al <span aria-hidden="true">Hidden</span>' +
     '<script>Ignored script</script><style>Ignored style</style> End';
-  await page.evaluate(markup => {
+  await page.evaluate((markup) => {
     Reveal.getCurrentSlide().querySelector('aside.notes').innerHTML = markup;
   }, markup);
   await page.locator('.read-aloud-button').click();
   expect(await page.evaluate(() => window.speechLog[0])).toBe(
-    'Start Paragraph After Division Quote Code Term Definition Heading Cell Next Title First Second Line Break international End'
+    'Start Paragraph After Division Quote Code Term Definition Heading Cell Next Title First Second Line Break international End',
   );
-  expect(await page.evaluate(() => Reveal.getCurrentSlide().querySelector('aside.notes').innerHTML)).toBe(markup);
+  expect(
+    await page.evaluate(() => Reveal.getCurrentSlide().querySelector('aside.notes').innerHTML),
+  ).toBe(markup);
 });
 
-test('navigation cancels, never autoplays, and every slide has the right state', async ({ page }) => {
+test('navigation cancels, never autoplays, and every slide has the right state', async ({
+  page,
+}) => {
   await open(page);
   await page.locator('.read-aloud-button').click();
   await page.evaluate(() => Reveal.next());
@@ -67,9 +90,11 @@ test('navigation cancels, never autoplays, and every slide has the right state',
   await page.evaluate(() => {
     for (const slide of Reveal.getSlides()) {
       Reveal.slide(...Object.values(Reveal.getIndices(slide)).slice(0, 2));
-      const text = slide.querySelector('aside.notes')?.textContent.trim() || slide.dataset.notes?.trim();
+      const text =
+        slide.querySelector('aside.notes')?.textContent.trim() || slide.dataset.notes?.trim();
       const button = document.querySelector('.read-aloud-button');
-      if ((button.getAttribute('aria-disabled') === 'true') === !!text) throw new Error(`Wrong button state: ${slide.id}`);
+      if ((button.getAttribute('aria-disabled') === 'true') === !!text)
+        throw new Error(`Wrong button state: ${slide.id}`);
     }
   });
   expect(await page.evaluate(() => window.speechLog.length)).toBe(2);
@@ -88,7 +113,9 @@ test('speech continues when the tab is hidden', async ({ page }) => {
   expect(await page.evaluate(() => window.speechLog)).not.toContain('CANCEL');
 });
 
-test('unsupported browser explains the unavailable control without breaking slides', async ({ page }) => {
+test('unsupported browser explains the unavailable control without breaking slides', async ({
+  page,
+}) => {
   await open(page, true);
   const button = page.locator('.read-aloud-button');
   const label = 'Read aloud is not supported in this browser';
@@ -101,7 +128,9 @@ test('unsupported browser explains the unavailable control without breaking slid
   await page.evaluate(() => Reveal.next());
 });
 
-test('slides without notes keep a focusable control that explains why it is unavailable', async ({ page }) => {
+test('slides without notes keep a focusable control that explains why it is unavailable', async ({
+  page,
+}) => {
   await open(page);
   await page.evaluate(() => Reveal.next());
   const button = page.locator('.read-aloud-button');
@@ -120,15 +149,27 @@ test('configuration, stale events and scroll view work', async ({ page }) => {
   await open(page);
   await page.evaluate(() => {
     Reveal.getPlugin('RevealReadAloud').destroy();
-    Reveal.configure({ readAloud: { rate: 1.2, lang: 'en-GB', voice: 'Test voice', labels: { read: 'Listen' } } });
+    Reveal.configure({
+      readAloud: { rate: 1.2, lang: 'en-GB', voice: 'Test voice', labels: { read: 'Listen' } },
+    });
     window.testPlugin = RevealReadAloud();
     window.testPlugin.init(Reveal);
   });
   const button = page.locator('.read-aloud-button');
   await expect(button).toHaveAttribute('aria-label', 'Listen');
   await button.click();
-  expect(await page.evaluate(() => [window.lastUtterance.lang, window.lastUtterance.rate, window.lastUtterance.voice.name])).toEqual(['en-GB', 1.2, 'Test voice']);
-  await page.evaluate(() => { window.oldEnd = window.lastUtterance.onend; Reveal.next(); Reveal.prev(); });
+  expect(
+    await page.evaluate(() => [
+      window.lastUtterance.lang,
+      window.lastUtterance.rate,
+      window.lastUtterance.voice.name,
+    ]),
+  ).toEqual(['en-GB', 1.2, 'Test voice']);
+  await page.evaluate(() => {
+    window.oldEnd = window.lastUtterance.onend;
+    Reveal.next();
+    Reveal.prev();
+  });
   await button.click();
   await page.evaluate(() => window.oldEnd());
   await expect(button).toHaveAttribute('aria-label', 'Stop reading');
