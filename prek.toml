@@ -65,11 +65,12 @@ args = [
 [[repos]]
 repo = "local"
 
-# Biome and tsc run from the locked node_modules installed by `pnpm install`.
+# Biome and tsc run from the locked node_modules installed by `pnpm install`;
+# `node --run` needs no pnpm on PATH, so CI only provisions Node.
 [[repos.hooks]]
 id = "check"
 name = "Biome lint and format, strict type check"
 language = "system"
-entry = "pnpm check"
+entry = "node --run check"
 files = "\\.(js|ts|css|json)$"
 pass_filenames = false
