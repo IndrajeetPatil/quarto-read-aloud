@@ -67,14 +67,14 @@ Customise colours with CSS variables `--read-aloud-background` and `--read-aloud
 Current Chrome, Edge, Firefox, and Safari support [browser speech synthesis](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisUtterance). Voices and pronunciation depend on the browser and device.
 
 ```sh
-pnpm install --frozen-lockfile
-pnpm exec playwright install chromium webkit
+vp install --frozen-lockfile
+vp exec playwright install chromium webkit
 quarto render example.qmd
 python3 -m http.server 8890 --bind 127.0.0.1
 # Another terminal:
-pnpm test
+vp exec playwright test
 # Or test a real presentation served locally:
-DECK_URL=http://127.0.0.1:8892/ pnpm test
+DECK_URL=http://127.0.0.1:8892/ vp exec playwright test
 ```
 
 Tests use Chromium and WebKit with a deterministic speech stub for note extraction, keyboard activation, stop/navigation, completion, errors, configuration, unsupported browsers, and mobile scroll layout. These tests do not prove audible playback. Manually check installed voices in each target browser.

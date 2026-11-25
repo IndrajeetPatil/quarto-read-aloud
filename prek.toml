@@ -1,8 +1,5 @@
 minimum_prek_version = "0.5.11"
-default_install_hook_types = [
-  "pre-commit",
-  "commit-msg",
-]
+default_install_hook_types = ["pre-commit", "commit-msg"]
 default_stages = ["pre-commit"]
 
 [update]
@@ -57,20 +54,16 @@ rev = "33b50eb042bee26eac0ee96ad84aa9c1b4dccdd8" # frozen: v4.5.0
 [[repos.hooks]]
 id = "conventional-pre-commit"
 stages = ["commit-msg"]
-args = [
-  "--strict",
-  "--verbose",
-]
+args = ["--strict", "--verbose"]
 
 [[repos]]
 repo = "local"
 
-# Biome and tsc run from the locked node_modules installed by `pnpm install`;
-# `node --run` needs no pnpm on PATH, so CI only provisions Node.
+# Type-aware linting resolves the locked node_modules from `vp install`.
 [[repos.hooks]]
-id = "check"
-name = "Biome lint and format, strict type check"
+id = "vite-plus"
+name = "Vite+ format, lint, and types"
 language = "system"
-entry = "node --run check"
-files = "\\.(js|ts|css|json)$"
+entry = "vp check --deny-warnings"
+files = "\\.([cm]?[jt]sx?|json|css|html|ya?ml|toml)$"
 pass_filenames = false
