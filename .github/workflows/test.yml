@@ -1,4 +1,4 @@
-name: Test extension
+name: Tests
 on:
   push:
     branches: [main]
@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   test:
-    name: Render and test browser behaviour
+    name: Tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
